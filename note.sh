@@ -296,8 +296,11 @@ info()
         esac
 }
 
+
+# list of all valid commands
 commands="init|deinit|add|edit|move|delete|list|show|info"
 
+# evaluate passed command arguments
 eval "case \"$1\" in
         \"\"|h|help|usage)
                 usage
@@ -307,6 +310,6 @@ eval "case \"$1\" in
                 ;;
         *)
                 error \"$1 is an unknown command.\"
-                echo \"Aborting...\"
+                usage
                 ;;
 esac"
