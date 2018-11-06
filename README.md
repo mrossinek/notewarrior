@@ -12,6 +12,7 @@ List of Commands
 ----------------
 
 * note init: initialize note dir
+* note deinit: removes all user data (use with care!)
 * note list: list notes (with filters)
 * note show: print note
 * note open: open converted note (pdf/html argument)
