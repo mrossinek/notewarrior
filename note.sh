@@ -29,6 +29,37 @@ usage()
         # done
 }
 
+_git()
+{
+        PWD=`pwd`
+        cd $DIRECTORY
+
+        case "$1" in
+                add)
+                        git add $2
+                        git commit -m "Added $2"
+                        ;;
+                edit)
+                        git add $2
+                        git commit -m "Edited $2"
+                        ;;
+                move)
+                        git rm $2
+                        git add $3
+                        git commit -m "Moved $2 to $3"
+                        ;;
+                delete)
+                        git rm $2
+                        git commit -m "Deleted $2"
+                        ;;
+                *)
+                        error "Unknown internal git operation"
+                        echo "Aborting..."
+                        ;;
+        esac
+
+        cd $PWD
+}
 
 init()
 {
@@ -104,6 +135,7 @@ add()
                                 echo "$1" > $DIRECTORY/$1.md
                                 echo "$1" | sed 's/[^*]/=/g' >> $DIRECTORY/$1.md
                                 $EDITOR $DIRECTORY/$1.md
+                                _git "add" "$1.md"
                         fi
                         ;;
                 *)
@@ -137,7 +169,11 @@ edit()
                                 esac
 
                         else
+                                CHANGE=`stat -c %z $DIRECTORY/$1.md`
                                 $EDITOR $DIRECTORY/$1.md
+                                if [[ `stat -c %z $DIRECTORY/$1.md` != "$CHANGE" ]]; then
+                                        _git "edit" "$1.md"
+                                fi
                         fi
                         ;;
                 *)
@@ -170,6 +206,7 @@ move()
                                 error "$2.md already exists!"
                         else
                                 mv $DIRECTORY/$1.md $DIRECTORY/$2.md
+                                _git "move" "$1.md" "$2.md"
                         fi
                         ;;
                 *)
@@ -197,6 +234,7 @@ delete()
                         case "$choice" in
                                 y*|Y*)
                                         rm $DIRECTORY/$1.md
+                                        _git "delete" "$1.md"
                                         ;;
                                 *)
                                         echo "Aborting delete..."
