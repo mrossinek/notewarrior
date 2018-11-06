@@ -1,13 +1,17 @@
 #!/bin/sh
 
 # color constants
+BOLD='\033[1;37m'
 BRED='\033[1;31m'
+BBLUE='\033[1;34m'
 BYELLOW='\033[1;33m'
 NC='\033[0m'  # no color
 
 # source config
 . ./config
 
+
+# wrapper functions
 error()
 {
         >&2 echo -e "${BRED}Error${NC}: $1"
@@ -18,15 +22,9 @@ warning()
         >&2 echo -e "${BYELLOW}Warning${NC}: $1"
 }
 
-
-usage()
+_usage()
 {
-        echo "Usage: note [$commands]"
-        echo "Use note [command] [help|usage] to find out more about a specific command"
-        # IFS='|' read -ra cmds <<< "$commands"
-        # for cmd in "${cmds[@]}"; do
-        #         $cmd usage
-        # done
+        echo -e "${BYELLOW}Usage${NC}: $1"
 }
 
 _git()
@@ -61,6 +59,24 @@ _git()
         cd $PWD
 }
 
+
+# usage info
+usage()
+{
+        _usage "note <$commands>"
+        echo "Use note <command> [help|usage] to find out more about a specific command"
+        echo "Alternatively note usage all prints the help info for all commands"
+        if [ "$2" = "all" ]; then
+                IFS='|' read -ra cmds <<< "$commands"
+                for cmd in "${cmds[@]}"; do
+                        echo -e "${BBLUE}$cmd${NC}"
+                        $cmd usage
+                done
+        fi
+}
+
+
+# directory management
 init()
 {
         case "$#" in
@@ -69,7 +85,7 @@ init()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note init"
+                                _usage "note init"
                                 echo "Initializes the configured directory with git"
                         else
                                 error "too many arguments for note init"
@@ -103,7 +119,7 @@ deinit()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note deinit"
+                                _usage "note deinit"
                                 echo "Removes the configured directory and all its contents"
                         else
                                 error "too many arguments for note deinit"
@@ -118,6 +134,7 @@ deinit()
 }
 
 
+# file editing
 add()
 {
         case "$#" in
@@ -127,7 +144,7 @@ add()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note add [name of new note]"
+                                _usage "note add <name of new note>"
                                 echo "Adds a new note"
                         elif [ -f $DIRECTORY/$1.md ]; then
                                 error "$1.md already exists!"
@@ -154,7 +171,7 @@ edit()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note edit [name of note]"
+                                _usage "note edit <name of note>"
                                 echo "Edits an existing note"
                         elif [ ! -f $DIRECTORY/$1.md ]; then
                                 error "$1.md does not exist!"
@@ -192,7 +209,7 @@ move()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note move [old name of note] [new name of note]"
+                                _usage "note move <old name of note> <new name of note>"
                                 echo "Renames an existing note"
                         else
                                 error "too few arguments for note move"
@@ -225,7 +242,7 @@ delete()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note delete [name of note]"
+                                _usage "note delete <name of note>"
                                 echo "Deletes an existing note"
                         elif [ ! -f $DIRECTORY/$1.md ]; then
                                 error "$1.md does not exist!"
@@ -250,6 +267,7 @@ delete()
 }
 
 
+# note viewing
 list()
 {
         case "$#" in
@@ -261,7 +279,7 @@ list()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note list"
+                                _usage "note list"
                                 echo "Lists contents of the notes directory"
                         else
                                 error "too many arguments for note list"
@@ -275,6 +293,36 @@ list()
         esac
 }
 
+info()
+{
+        case "$#" in
+                0)
+                        error "too few arguments for note info"
+                        info help
+                        ;;
+                1)
+                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
+                                _usage "note info <name of note>"
+                                echo "Prints the metadata of an existing note"
+                        elif [ ! -f $DIRECTORY/$1.md ]; then
+                                error "$1.md does not exist!"
+                        else
+                                echo "Name:         $1.md"
+                                echo "Last change:  `stat -c %z $DIRECTORY/$1.md`"
+                                echo "Git history:"
+                                PWD=`pwd`
+                                cd $DIRECTORY
+                                git log -p -- $1.md
+                                cd $PWD
+                        fi
+                        ;;
+                *)
+                        error "too many arguments for note info"
+                        info help
+                        ;;
+        esac
+}
+
 show()
 {
         case "$#" in
@@ -284,7 +332,7 @@ show()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note show [name of note]"
+                                _usage "note show <name of note>"
                                 echo "Prints an existing note to stdout"
                         elif [ ! -f $DIRECTORY/$1.md ]; then
                                 error "$1.md does not exist!"
@@ -309,36 +357,6 @@ show()
         esac
 }
 
-info()
-{
-        case "$#" in
-                0)
-                        error "too few arguments for note info"
-                        info help
-                        ;;
-                1)
-                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note info [name of note]"
-                                echo "Prints the metadata of an existing note"
-                        elif [ ! -f $DIRECTORY/$1.md ]; then
-                                error "$1.md does not exist!"
-                        else
-                                echo "Name:         $1.md"
-                                echo "Last change:  `stat -c %z $DIRECTORY/$1.md`"
-                                echo "Git history:"
-                                PWD=`pwd`
-                                cd $DIRECTORY
-                                git log -p -- $1.md
-                                cd $PWD
-                        fi
-                        ;;
-                *)
-                        error "too many arguments for note info"
-                        info help
-                        ;;
-        esac
-}
-
 open()
 {
         case "$#" in
@@ -348,7 +366,7 @@ open()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note open [name of note] [html|pdf]"
+                                _usage "note open <name of note> [html|pdf]"
                                 echo "Opens the note in the specified format (html by default)"
                         else
                                 open $1 html
@@ -394,6 +412,7 @@ open()
 }
 
 
+# system management
 undo()
 {
         case "$#" in
@@ -414,7 +433,7 @@ undo()
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
-                                echo "Usage: note undo"
+                                _usage "note undo"
                                 echo "Undoes the last change to the note system (as recorded by git)"
                         else
                                 error "too many arguments for note undo"
@@ -429,19 +448,20 @@ undo()
 }
 
 
+# main exectuion
 # list of all valid commands
-commands="init|deinit|add|edit|move|delete|list|show|info|open|undo"
+commands="init|deinit|add|edit|move|delete|list|info|show|open|undo"
 
 # evaluate passed command arguments
 eval "case \"$1\" in
         \"\"|h|help|usage)
-                usage
+                usage $@
                 ;;
         $commands)
                 $@
                 ;;
         *)
                 error \"$1 is an unknown command.\"
-                usage
+                usage $@
                 ;;
 esac"
