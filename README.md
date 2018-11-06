@@ -15,13 +15,13 @@ List of Commands
 * [x] note deinit: removes all user data (use with care!)
 * [x] note list: list notes (with filters)
 * [x] note show: print note
-* [ ] note open: open converted note (pdf/html argument)
+* [x] note open: open converted note (pdf/html argument)
 * [x] note info: show metadata about note (incl. history)
 * [x] note add: adds a note
 * [x] note edit: edits a note
 * [x] note move: moves an existing note
 * [x] note delete: deletes an existing note (or multiple)
-* [ ] note undo/redo: un/redo last change (based on git history)
+* [x] note undo/redo: un/redo last change (based on git history)
 
 General Implementation
 ----------------------

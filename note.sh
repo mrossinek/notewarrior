@@ -339,6 +339,60 @@ info()
         esac
 }
 
+open()
+{
+        case "$#" in
+                0)
+                        error "too few arguments for note open"
+                        open help
+                        ;;
+                1)
+                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
+                                echo "Usage: note open [name of note] [html|pdf]"
+                                echo "Opens the note in the specified format (html by default)"
+                        else
+                                open $1 html
+                        fi
+                        ;;
+                2)
+                        if [ ! -f $DIRECTORY/$1.md ]; then
+                                error "$1.md does not exist!"
+                                read -p "Would you like to create it now? (Y/n)" choice
+                                case "$choice" in
+                                        (n*|N*)
+                                                echo "Aborting..."
+                                                ;;
+                                        *)
+                                                add $1
+                                                ;;
+                                esac
+
+                        else
+                                case "$2" in
+                                        html)
+                                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.html
+                                                $BROWSER $DIRECTORY/$1.html
+                                                rm $DIRECTORY/$1.html
+                                                ;;
+                                        pdf)
+                                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.pdf
+                                                $PDFVIEWER $DIRECTORY/$1.pdf
+                                                rm $DIRECTORY/$1.pdf
+                                                ;;
+                                        *)
+                                                error "incompatible note opening format"
+                                                echo "Aborting open..."
+                                                ;;
+                                esac
+                        fi
+                        ;;
+                *)
+                        error "too many arguments for note open"
+                        open help
+                        ;;
+        esac
+}
+
 
 undo()
 {
@@ -376,7 +430,7 @@ undo()
 
 
 # list of all valid commands
-commands="init|deinit|add|edit|move|delete|list|show|info|undo"
+commands="init|deinit|add|edit|move|delete|list|show|info|open|undo"
 
 # evaluate passed command arguments
 eval "case \"$1\" in
