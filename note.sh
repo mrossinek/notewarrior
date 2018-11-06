@@ -137,6 +137,29 @@ delete()
         esac
 }
 
+
+list()
+{
+        case "$#" in
+                0)
+                        echo "Usage: note list [name of note]"
+                        ;;
+                1)
+                        if [ "$1" != "list" ]; then
+                                echo "Oops, something went wrong here."
+                        else
+                                tree -D $DIRECTORY
+                                if [ "$?" -ne "0" ]; then
+                                        ls -l $DIRECTORY
+                                fi
+                        fi
+                        ;;
+                *)
+                        echo "Error: too many arguments for note list"
+                        ;;
+        esac
+}
+
 case "$1" in
         ""|h|help|usage)
                 usage
@@ -158,6 +181,9 @@ case "$1" in
                 ;;
         delete)
                 delete $@
+                ;;
+        list)
+                list $@
                 ;;
         *)
                 echo "Error: $1 is an unknown command."
