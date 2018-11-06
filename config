@@ -1,0 +1,5 @@
+DIRECTORY=./tmp
+
+EDTIOR=nvim
+BROWSER=qutebrowser
+PDFVIEWER=zathura
