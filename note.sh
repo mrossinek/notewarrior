@@ -4,11 +4,7 @@ DIRECTORY="./tmp/"
 
 init()
 {
-        CURDIR=`pwd`
-        mkdir -p $DIRECTORY
-        cd $DIRECTORY
-        git init
-        cd $CURDIR
+        git init $DIRECTORY
 }
 
 deinit()
@@ -22,3 +18,18 @@ deinit()
         esac
 }
 
+usage()
+{
+ echo "Usage: note [command]"
+}
+
+case "$1" in
+        ""|h|help|usage) usage
+        ;;
+        init) init
+        ;;
+        deinit) deinit
+        ;;
+        *) echo "Error: $1 is an unknown command.\nAborting..."
+        ;;
+esac
