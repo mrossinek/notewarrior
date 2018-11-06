@@ -46,7 +46,7 @@ init()
                         ;;
                 *)
                         error "too many arguments for note init"
-                        init help
+                       init help
                         ;;
         esac
 }
@@ -57,7 +57,7 @@ deinit()
                 0)
                         read -p "Are you sure you want to delete all user data in $DIRECTORY? (y/N)" choice
                         case "$choice" in
-                                (y*|Y*)
+                                y*|Y*)
                                         rm -rf $DIRECTORY
                                         ;;
                                 *)
@@ -189,7 +189,15 @@ delete()
                         elif [ ! -f $DIRECTORY/$1.md ]; then
                                 error "$1.md does not exist!"
                         else
-                                rm $DIRECTORY/$1.md
+                        read -p "Are you sure you want to delete the note $1.md? (y/N)" choice
+                        case "$choice" in
+                                y*|Y*)
+                                        rm $DIRECTORY/$1.md
+                                        ;;
+                                *)
+                                        echo "Aborting delete..."
+                                        ;;
+                        esac
                         fi
                         ;;
                 *)
@@ -204,7 +212,7 @@ list()
 {
         case "$#" in
                 0)
-                        tree -D $DIRECTORY
+                        tree -D $DIRECTORY 2> /dev/null
                         if [ "$?" -ne "0" ]; then
                                 ls -l $DIRECTORY
                         fi
