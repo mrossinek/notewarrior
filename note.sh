@@ -5,7 +5,7 @@ BRED='\033[1;31m'
 BYELLOW='\033[1;33m'
 NC='\033[0m'  # no color
 
-# read config
+# source config
 . ./config
 
 error()
@@ -325,6 +325,11 @@ info()
                         else
                                 echo "Name:         $1.md"
                                 echo "Last change:  `stat -c %z $DIRECTORY/$1.md`"
+                                echo "Git history:"
+                                PWD=`pwd`
+                                cd $DIRECTORY
+                                git log -p -- $1.md
+                                cd $PWD
                         fi
                         ;;
                 *)
@@ -335,8 +340,43 @@ info()
 }
 
 
+undo()
+{
+        case "$#" in
+                0)
+                        PWD=`pwd`
+                        cd $DIRECTORY
+                        git show HEAD
+                        read -p "Are you sure you want to undo the above changes? (y/N)" choice
+                        case "$choice" in
+                                y*|Y*)
+                                        git revert --no-edit HEAD
+                                        ;;
+                                *)
+                                        echo "Aborting undo..."
+                                        ;;
+                        esac
+                        cd $PWD
+                        ;;
+                1)
+                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
+                                echo "Usage: note undo"
+                                echo "Undoes the last change to the note system (as recorded by git)"
+                        else
+                                error "too many arguments for note undo"
+                                undo help
+                        fi
+                        ;;
+                *)
+                        error "too many arguments for note undo"
+                       undo help
+                        ;;
+        esac
+}
+
+
 # list of all valid commands
-commands="init|deinit|add|edit|move|delete|list|show|info"
+commands="init|deinit|add|edit|move|delete|list|show|info|undo"
 
 # evaluate passed command arguments
 eval "case \"$1\" in
