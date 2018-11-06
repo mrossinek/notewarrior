@@ -1,11 +1,12 @@
 #!/bin/sh
 
+# color constants
 BRED='\033[1;31m'
 BYELLOW='\033[1;33m'
 NC='\033[0m'  # no color
 
-DIRECTORY="./tmp"
-EDITOR="nvim"
+# read config
+. ./config
 
 error()
 {
@@ -55,15 +56,19 @@ deinit()
 {
         case "$#" in
                 0)
-                        read -p "Are you sure you want to delete all user data in $DIRECTORY? (y/N)" choice
-                        case "$choice" in
-                                y*|Y*)
-                                        rm -rf $DIRECTORY
-                                        ;;
-                                *)
-                                        echo "Aborting deinit..."
-                                        ;;
-                        esac
+                        if [ ! -d $DIRECTORY ]; then
+                                error "$DIRECTORY does not exist!"
+                        else
+                                read -p "Are you sure you want to delete all user data in $DIRECTORY? (y/N)" choice
+                                case "$choice" in
+                                        y*|Y*)
+                                                rm -rf $DIRECTORY
+                                                ;;
+                                        *)
+                                                echo "Aborting deinit..."
+                                                ;;
+                                esac
+                        fi
                         ;;
                 1)
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
@@ -173,7 +178,6 @@ move()
                         ;;
         esac
 }
-
 
 delete()
 {
