@@ -13,10 +13,10 @@ List of Commands
 
 * [x] note init: initialize note dir
 * [x] note deinit: removes all user data (use with care!)
-* [ ] note list: list notes (with filters)
-* [ ] note show: print note
+* [x] note list: list notes (with filters)
+* [x] note show: print note
 * [ ] note open: open converted note (pdf/html argument)
-* [ ] note info: show metadata about note (incl. history)
+* [x] note info: show metadata about note (incl. history)
 * [x] note add: adds a note
 * [x] note edit: edits a note
 * [x] note move: moves an existing note

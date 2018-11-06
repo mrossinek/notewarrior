@@ -233,8 +233,66 @@ list()
         esac
 }
 
+show()
+{
+        case "$#" in
+                0)
+                        error "too few arguments for note show"
+                        show help
+                        ;;
+                1)
+                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
+                                echo "Usage: note show [name of note]"
+                                echo "Prints an existing note to stdout"
+                        elif [ ! -f $DIRECTORY/$1.md ]; then
+                                error "$1.md does not exist!"
+                                read -p "Would you like to create it now? (Y/n)" choice
+                                case "$choice" in
+                                        (n*|N*)
+                                                echo "Aborting..."
+                                                ;;
+                                        *)
+                                                add $1
+                                                ;;
+                                esac
 
-commands="init|deinit|add|edit|move|delete|list"
+                        else
+                                cat $DIRECTORY/$1.md
+                        fi
+                        ;;
+                *)
+                        error "too many arguments for note show"
+                        show help
+                        ;;
+        esac
+}
+
+info()
+{
+        case "$#" in
+                0)
+                        error "too few arguments for note info"
+                        info help
+                        ;;
+                1)
+                        if [[ "$1" =  "help" || "$1" = "usage" ]]; then
+                                echo "Usage: note info [name of note]"
+                                echo "Prints the metadata of an existing note"
+                        elif [ ! -f $DIRECTORY/$1.md ]; then
+                                error "$1.md does not exist!"
+                        else
+                                echo "Name:         $1.md"
+                                echo "Last change:  `stat -c %z $DIRECTORY/$1.md`"
+                        fi
+                        ;;
+                *)
+                        error "too many arguments for note info"
+                        info help
+                        ;;
+        esac
+}
+
+commands="init|deinit|add|edit|move|delete|list|show|info"
 
 eval "case \"$1\" in
         \"\"|h|help|usage)
