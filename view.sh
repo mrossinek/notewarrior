@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # note viewing
 list()
 {

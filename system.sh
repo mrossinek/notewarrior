@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # usage info
 usage()
 {

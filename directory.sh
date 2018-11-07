@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # directory management
 init()
 {

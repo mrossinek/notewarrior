@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# source functions
+. ./helper.sh
+. ./directory.sh
+. ./file.sh
+. ./view.sh
+. ./system.sh
+
 # CONSTANTS
 DEBUG=false
 # color constants
@@ -11,15 +18,7 @@ NC='\033[0m'  # no color
 # list of all valid commands
 COMMANDS="init|deinit|add|edit|move|delete|list|info|show|open|undo"
 
-# source functions
-. ./helper.sh
-. ./directory.sh
-. ./file.sh
-. ./view.sh
-. ./system.sh
-
 # main exectuion
-
 # parse command line options
 while getopts ":c:d" opt; do
         case "$opt" in
