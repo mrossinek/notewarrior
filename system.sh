@@ -1,5 +1,21 @@
 #!/bin/sh
 
+# usage info
+usage()
+{
+        _usage "note <$COMMANDS>"
+        echo "Use note <command> [help|usage] to find out more about a specific command"
+        echo "Alternatively note usage all prints the help info for all commands"
+        if [ "$2" = "all" ]; then
+                IFS='|' read -ra cmds <<< "$COMMANDS"
+                for cmd in "${cmds[@]}"; do
+                        echo -e "${BBLUE}$cmd${NC}"
+                        $cmd usage
+                done
+        fi
+}
+
+
 # system management
 undo()
 {
