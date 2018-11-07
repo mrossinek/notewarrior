@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # CONSTANTS
+DEBUG=0
 # color constants
 BOLD='\033[1;37m'
 BRED='\033[1;31m'
@@ -10,9 +11,6 @@ NC='\033[0m'  # no color
 # list of all valid commands
 COMMANDS="init|deinit|add|edit|move|delete|list|info|show|open|undo"
 
-# source config
-. ./config
-
 # source functions
 . ./helper.sh
 . ./directory.sh
@@ -21,6 +19,42 @@ COMMANDS="init|deinit|add|edit|move|delete|list|info|show|open|undo"
 . ./system.sh
 
 # main exectuion
+
+# parse command line options
+while getopts ":c:d" opt; do
+        case "$opt" in
+                c)
+                        CONFIG="$OPTARG"
+                        shift 2
+                        ;;
+                d)
+                        DEBUG=1
+                        shift 1
+                        ;;
+                \?)
+                        error "Invalid command line option"
+                        usage
+                        exit 1
+                        ;;
+                :)
+                        error "Option -$OPTARG requires an argument."
+                        exit 1
+                        ;;
+        esac
+done
+
+# source config
+if [ ${DEBUG} ]; then
+        . ./debug_config
+elif [ ! -z ${CONFIG} ]; then
+        . ./${CONFIG}
+elif [ -f ~/.config/notewarrior/config ]; then
+        . ~/.config/notewarrior/config
+elif [ -f ~/.noterc ]; then
+        . ~/.noterc
+else
+        . ./default_config
+fi
 
 # evaluate passed command arguments
 eval "case \"$1\" in

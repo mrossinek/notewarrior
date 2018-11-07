@@ -1,4 +1,4 @@
-DIRECTORY=./debug/
+DIRECTORY=./debug
 
 EDTIOR=nvim
 BROWSER=qutebrowser
