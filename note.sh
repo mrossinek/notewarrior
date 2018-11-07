@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # CONSTANTS
-DEBUG=0
+DEBUG=false
 # color constants
 BOLD='\033[1;37m'
 BRED='\033[1;31m'
@@ -28,7 +28,7 @@ while getopts ":c:d" opt; do
                         shift 2
                         ;;
                 d)
-                        DEBUG=1
+                        DEBUG=true
                         shift 1
                         ;;
                 \?)
@@ -44,7 +44,7 @@ while getopts ":c:d" opt; do
 done
 
 # source config
-if [ ${DEBUG} ]; then
+if $DEBUG ; then
         . ./debug_config
 elif [ ! -z ${CONFIG} ]; then
         . ./${CONFIG}
