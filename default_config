@@ -1,5 +1,0 @@
-DIRECTORY=~/.notes
-
-EDTIOR=nvim
-BROWSER=qutebrowser
-PDFVIEWER=zathura

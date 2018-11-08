@@ -15,7 +15,11 @@ add()
                         else
                                 echo "$1" > $DIRECTORY/$1.md
                                 echo "$1" | sed 's/[^*]/=/g' >> $DIRECTORY/$1.md
-                                $EDITOR $DIRECTORY/$1.md
+                                if [ ! -z $EDITOR ]; then
+                                        $EDITOR $DIRECTORY/$1.md
+                                else
+                                        vim $DIRECTORY/$1.md
+                                fi
                                 _git "add" "$1.md"
                         fi
                         ;;
@@ -51,7 +55,11 @@ edit()
 
                         else
                                 CHANGE=`stat -c %z $DIRECTORY/$1.md`
-                                $EDITOR $DIRECTORY/$1.md
+                                if [ ! -z $EDITOR ]; then
+                                        $EDITOR $DIRECTORY/$1.md
+                                else
+                                        vim $DIRECTORY/$1.md
+                                fi
                                 if [[ `stat -c %z $DIRECTORY/$1.md` != "$CHANGE" ]]; then
                                         _git "edit" "$1.md"
                                 fi

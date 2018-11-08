@@ -1,5 +1,0 @@
-DIRECTORY=./debug
-
-EDTIOR=nvim
-BROWSER=qutebrowser
-PDFVIEWER=zathura

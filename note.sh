@@ -9,6 +9,7 @@
 
 # CONSTANTS
 DEBUG=false
+DIRECTORY=""
 # color constants
 BOLD='\033[1;37m'
 BRED='\033[1;31m'
@@ -44,7 +45,7 @@ done
 
 # source config
 if $DEBUG ; then
-        . ./debug_config
+        DIRECTORY=/tmp/notewarrior-debug
 elif [ ! -z ${CONFIG} ]; then
         . ./${CONFIG}
 elif [ -f ~/.config/notewarrior/config ]; then
@@ -52,7 +53,7 @@ elif [ -f ~/.config/notewarrior/config ]; then
 elif [ -f ~/.noterc ]; then
         . ~/.noterc
 else
-        . ./default_config
+        DIRECTORY=~/.notes
 fi
 
 # evaluate passed command arguments
