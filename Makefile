@@ -3,6 +3,9 @@ all: note
 clean:
 	rm -f note
 
+install: note
+	sudo cp $< /usr/bin/
+
 note: note.sh helper.sh system.sh directory.sh file.sh view.sh
 	# recreate target
 	rm -f $@
