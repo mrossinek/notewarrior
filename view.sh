@@ -117,22 +117,9 @@ open()
                                 esac
 
                         else
-                                case "$2" in
-                                        html)
-                                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.html
-                                                $BROWSER $DIRECTORY/$1.html
-                                                rm $DIRECTORY/$1.html
-                                                ;;
-                                        pdf)
-                                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.pdf
-                                                $PDFVIEWER $DIRECTORY/$1.pdf
-                                                rm $DIRECTORY/$1.pdf
-                                                ;;
-                                        *)
-                                                error "incompatible note opening format"
-                                                echo "Aborting open..."
-                                                ;;
-                                esac
+                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.$2
+                                xdg-open $DIRECTORY/$1.$2
+                                rm $DIRECTORY/$1.$2
                         fi
                         ;;
                 *)
