@@ -22,6 +22,7 @@ List of Commands
 * [x] note move: moves an existing note
 * [x] note delete: deletes an existing note (or multiple)
 * [x] note undo/redo: un/redo last change (based on git history)
+* [ ] note search: search all notes for keyword(s)
 
 General Implementation
 ----------------------

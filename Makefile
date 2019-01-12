@@ -6,6 +6,9 @@ clean:
 install: note
 	sudo cp $< /usr/bin/
 
+uninstall:
+	sudo rm /usr/bin/note
+
 note: note.sh helper.sh system.sh directory.sh file.sh view.sh
 	# recreate target
 	rm -f $@
