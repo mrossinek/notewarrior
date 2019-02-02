@@ -13,8 +13,7 @@ add()
                         elif [ -f $DIRECTORY/$1.md ]; then
                                 error "$1.md already exists!"
                         else
-                                echo "$1" > $DIRECTORY/$1.md
-                                echo "$1" | sed 's/[^*]/=/g' >> $DIRECTORY/$1.md
+                                echo "= $1 =" > $DIRECTORY/$1.md
                                 if [ ! -z $EDITOR ]; then
                                         $EDITOR $DIRECTORY/$1.md
                                 else
