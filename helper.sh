@@ -43,7 +43,23 @@ _git()
                         ;;
         esac
 
-        cd $PWD
+        if [ $(git status -s | wc -l) != 0 ]; then
+                warning "There are unstaged changes in your repo!"
+                read -p "Would you like to work on this? [Yes/no] " choice
+                case "$choice" in
+                        (n*|N*)
+                                cd $PWD
+                                ;;
+                        *)
+                                warning "You will be dropped into a subshell inside your notes directory!"
+                                echo -e "You can leave by typing '${BRED}exit${NC}'"
+                                cd $DIRECTORY
+                                exec $SHELL
+                                ;;
+                esac
+        else
+                cd $PWD
+        fi
 }
 
 
