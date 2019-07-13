@@ -1,0 +1,53 @@
+#compdef note
+
+# This completion file is based on:
+# https://github.com/pimterry/notes/blob/master/_notes
+
+__note_subcmds ()
+{
+    local -a list
+    list=(
+    init:'Initializes the configured directory with git'
+    deinit:'Removes the configured directory and all its content'
+    add:'Adds a new note'
+    edit:'Edits an existing note'
+    move:'Renames an existing note'
+    delete:'Deletes an existing note'
+    list:'Lists contents of the notes directory'
+    info:'Prints the metadata of an existing note'
+    show:'Prints ane existing note to stdout'
+    open:'Opens the note in html or pdf format'
+    undo:'Undoes the last change to the note system (as recorded by git)'
+    help:'Displays the help'
+    usage:'Displays usage info'
+    --config:'Provide an alternative config'
+    --debug:'Enable debug mode'
+    )
+    _describe -t sub-commands 'sub commands' list && _ret=0
+}
+
+_note ()
+{
+    if [ -f ~/.config/notewarrior/config ]; then
+        . ~/.config/notewarrior/config
+    elif [ -f ~/.noterc ]; then
+        . ~/.noterc
+    fi
+
+    local configured_dir=${DIRECTORY%/}
+    local note_dir="${configured_dir:-$HOME/.notes}"
+
+    if (($CURRENT == 2)); then
+        _alternative 'sub-commands:files:__note_subcmds' && _ret=0
+    elif (($CURRENT == 3)); then
+        case $words[2] in
+            edit|move|delete|info|show|open)
+                _path_files -W "${note_dir}" && _ret=0;;
+        esac
+    elif (($CURRENT >= 3)); then
+        case $words[2] in
+            move)
+                _path_files -W "${note_dir}" && _ret=0;;
+        esac
+    fi
+}

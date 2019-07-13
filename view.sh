@@ -32,18 +32,19 @@ info()
                         info help
                         ;;
                 1)
+                        name=$( basename $1 .md )
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                                 _usage "note info <name of note>"
                                 echo "Prints the metadata of an existing note"
-                        elif [ ! -f $DIRECTORY/$1.md ]; then
-                                error "$1.md does not exist!"
+                        elif [ ! -f $DIRECTORY/$name.md ]; then
+                                error "$name.md does not exist!"
                         else
-                                echo "Name:         $1.md"
-                                echo "Last change:  `stat -c %z $DIRECTORY/$1.md`"
+                                echo "Name:         $name.md"
+                                echo "Last change:  `stat -c %z $DIRECTORY/$name.md`"
                                 echo "Git history:"
                                 PWD=`pwd`
                                 cd $DIRECTORY
-                                git log -p -- $1.md
+                                git log -p -- $name.md
                                 cd $PWD
                         fi
                         ;;
@@ -62,23 +63,24 @@ show()
                         show help
                         ;;
                 1)
+                        name=$( basename $1 .md )
                         if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                                 _usage "note show <name of note>"
                                 echo "Prints an existing note to stdout"
-                        elif [ ! -f $DIRECTORY/$1.md ]; then
-                                error "$1.md does not exist!"
+                        elif [ ! -f $DIRECTORY/$name.md ]; then
+                                error "$name.md does not exist!"
                                 read -p "Would you like to create it now? (Y/n)" choice
                                 case "$choice" in
                                         (n*|N*)
                                                 echo "Aborting..."
                                                 ;;
                                         *)
-                                                add $1
+                                                add $name
                                                 ;;
                                 esac
 
                         else
-                                cat $DIRECTORY/$1.md
+                                cat $DIRECTORY/$name.md
                         fi
                         ;;
                 *)
@@ -104,22 +106,23 @@ open()
                         fi
                         ;;
                 2)
-                        if [ ! -f $DIRECTORY/$1.md ]; then
-                                error "$1.md does not exist!"
+                        name=$( basename $1 .md )
+                        if [ ! -f $DIRECTORY/$name.md ]; then
+                                error "$name.md does not exist!"
                                 read -p "Would you like to create it now? (Y/n)" choice
                                 case "$choice" in
                                         (n*|N*)
                                                 echo "Aborting..."
                                                 ;;
                                         *)
-                                                add $1
+                                                add $name
                                                 ;;
                                 esac
 
                         else
-                                pandoc $DIRECTORY/$1.md -s -o $DIRECTORY/$1.$2
-                                xdg-open $DIRECTORY/$1.$2
-                                rm $DIRECTORY/$1.$2
+                                pandoc $DIRECTORY/$name.md -s -o $DIRECTORY/$name.$2
+                                xdg-open $DIRECTORY/$name.$2
+                                rm $DIRECTORY/$name.$2
                         fi
                         ;;
                 *)
