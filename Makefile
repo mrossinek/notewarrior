@@ -4,11 +4,11 @@ clean:
 	rm -f note
 
 install: note
-	sudo cp $< /usr/bin/
+	sudo cp $< /usr/local/bin/
 	sudo cp _note /usr/share/zsh/site-functions/
 
 uninstall:
-	sudo rm /usr/bin/note
+	sudo rm /usr/local/bin/note
 	sudo rm /usr/share/zsh/site-functions/_note
 
 note: note.sh helper.sh system.sh directory.sh file.sh view.sh
