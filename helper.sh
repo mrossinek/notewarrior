@@ -14,6 +14,12 @@ _usage()
     echo -e "${BYELLOW}Usage${NC}: $1"
 }
 
+_config()
+{
+    echo -e "${BYELLOW}$1${NC} [Default: $2]"
+    echo -e "$3"
+}
+
 _git()
 {
     PWD=$(pwd)

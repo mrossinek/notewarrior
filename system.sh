@@ -3,11 +3,21 @@ usage()
 {
     _usage "note <${COMMANDS}>"
     echo "Use note <command> [help|usage] to find out more about a specific command."
-    echo "Alternatively note usage all prints the help info for all commands."
+    echo "Alternatively 'note usage commands' prints the help info for all commands"
+    echo "and 'note usage config' prints the help info for possible configuratio options."
     IFS='|' read -ra cmds <<< "${COMMANDS}"
-    all=" all"
-    if [[ ${cmds[*]}$all =~ (^|[[:space:]])$2($|[[:space:]]) ]]; then
-        if [ "$2" = "all" ]; then
+    misc=" commands config"
+    if [[ ${cmds[*]}$misc =~ (^|[[:space:]])$2($|[[:space:]]) ]]; then
+        if [ "$2" = "config" ]; then
+            echo -e "${BBLUE}Configuration${NC}"
+            echo -e "You can specify any of the following configuration options as simple bash variables."
+            echo -e "Config files may be placed in $HOME/.noterc or $HOME/.config/notewarrior/config"
+            echo -e "Alternatively you can provide a temporary config file with the -c <CONFIG> option."
+            echo -e "${BBLUE}Variables${NC}"
+            _config "DIRECTORY" "$HOME/.notes" "Path to the notes directory."
+            _config "EXTENSION" "md" "File extension to use for notes."
+            _config "ENABLE_GITWATCH" "true" "Whether to autostart gitwatch (true|false)."
+        elif [ "$2" = "commands" ]; then
             for cmd in "${cmds[@]}"; do
                 echo -e "${BBLUE}$cmd${NC}"
                 "${cmd}" usage

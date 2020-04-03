@@ -39,3 +39,10 @@ Please ensure that the following programs are installed:
 - `move`: moves an existing note
 - `delete`: deletes an existing note (or multiple)
 - `undo/redo`: un/redo last change (based on git history)
+
+## List of Configuration options
+Configuration files may be placed in `~/.noterc` or `~/.config/notewarrior/config` or specified at runtime via the `-c <CONFIG>` command line option.
+
+- `DIRECTORY`: path to the notes directory (default: `~/.notes`)
+- `EXTENSION`: file extension for notes (default: `md`)
+- `ENABLE_GITWATCH`: whether to autostart gitwatch (default: `true`) [`true` or `false`]
