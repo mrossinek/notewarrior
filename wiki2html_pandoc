@@ -1,0 +1,25 @@
+#!/bin/bash
+# Vimwiki (markdown style) conversion script using pandoc.
+# This script shall be used as the source for vimwiki's custom wiki2html
+# conversion binary.
+#
+# Usage: cf https://github.com/vimwiki/vimwiki/blob/master/doc/vimwiki.txt#L2216
+# Requirements: pandoc (https://pandoc.org/)
+
+# TODO properly assert arguments
+
+# store required arguments
+force=$1
+syntax=$2
+extension=$3
+output_dir=$4
+input_file=$5
+css_file=$6
+# TODO also handle optional arguments 7-11
+
+filename=${input_file##*/}
+filename=${filename%.${extension}}
+
+# TODO assert pandoc is actually installed
+pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${filename}".html "${input_file}" \
+    --self-contained -c "${css_file}"
