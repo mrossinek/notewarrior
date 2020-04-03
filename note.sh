@@ -1,12 +1,3 @@
-#!/bin/sh
-
-# source functions
-. ./helper.sh
-. ./directory.sh
-. ./file.sh
-. ./view.sh
-. ./system.sh
-
 # CONSTANTS
 DEBUG=false
 DIRECTORY=""
