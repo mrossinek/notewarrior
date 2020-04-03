@@ -77,10 +77,21 @@ if [[ -f "${output_dir}/${output_file}.html" ]] && [[ ${force} -ne 1 ]]; then
     exit 1
 fi
 
+# preprocess the input_file
+contents=$(cat "${input_file}")
+
+# Links to specific sections [desc](#section) need to have spaces replaced by hyphens
+contents=$(sed -E ":a;s/[^!]\[(.+)\]\(\#([^\)]+)\ ([^\)]+)\)/\[\1\]\(\#\2-\3\)/;ta;" <<< "${contents}")
+# Links of other files [desc](file) need to have .html appended to them [desc](file.html)
+contents=$(sed -E "s/[^!]\[(.+)\]\(([^\#\)]+)\)/\[\1\]\(\2.html\)/g" <<< "${contents}")
+
+# perform actual conversion with pandoc
 if [[ "${template_file}" != -* ]]; then
-    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html "${input_file}" \
-        --self-contained --css="${css_file}" --template="${template_file}"
+    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html \
+        --self-contained --css="${css_file}" --template="${template_file}" \
+        < "${contents}"
 else
-    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html "${input_file}" \
-        --self-contained --css="${css_file}"
+    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html \
+        --self-contained --css="${css_file}" \
+        <<< "${contents}"
 fi
