@@ -3,8 +3,8 @@ list()
 {
     case "$#" in
         0)
-            if ! tree -D "${DIRECTORY}" 2>/dev/null; then
-                ls -l "${DIRECTORY}"
+            if ! tree -D "${DIRECTORY}" -P "*.md" 2>/dev/null; then
+                ls -l "${DIRECTORY}/*.md"
             fi
             ;;
         1)
