@@ -1,7 +1,6 @@
 # shellcheck disable=SC1090,SC2034
 # CONSTANTS
 DEBUG=false
-DIRECTORY=""
 # color constants
 BOLD='\033[1;37m'
 BRED='\033[1;31m'
@@ -44,8 +43,17 @@ elif [ -f ~/.config/notewarrior/config ]; then
     . ~/.config/notewarrior/config
 elif [ -f ~/.noterc ]; then
     . ~/.noterc
-else
+fi
+
+# use defaults if nothing was set yet
+if [[ ! -v "DIRECTORY" ]]; then
     DIRECTORY=~/.notes
+fi
+if [[ ! -v "ENABLE_GITWATCH" ]]; then
+    ENABLE_GITWATCH=true
+fi
+if [[ ! -v "EXTENSION" ]]; then
+    EXTENSION=md
 fi
 
 # evaluate passed command arguments

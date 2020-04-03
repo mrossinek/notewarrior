@@ -3,8 +3,8 @@ list()
 {
     case "$#" in
         0)
-            if ! tree -D "${DIRECTORY}" -P "*.md" 2>/dev/null; then
-                ls -l "${DIRECTORY}/*.md"
+            if ! tree -D "${DIRECTORY}" -P "*.${EXTENSION}" 2>/dev/null; then
+                ls -l "${DIRECTORY}/*.${EXTENSION}"
             fi
             ;;
         1)
@@ -31,19 +31,19 @@ info()
             info help
             ;;
         1)
-            name=$( basename "$1" .md )
+            name=$( basename "$1" ".${EXTENSION}" )
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                 _usage "note info <name of note>"
                 echo "Prints the metadata of an existing note"
-            elif [ ! -f "${DIRECTORY}/${name}.md" ]; then
-                error "$name.md does not exist!"
+            elif [ ! -f "${DIRECTORY}/${name}.${EXTENSION}" ]; then
+                error "$name.${EXTENSION} does not exist!"
             else
-                echo "Name:         ${name}.md"
-                echo "Last change:  $(stat -c %z "${DIRECTORY}/${name}".md)"
+                echo "Name:         ${name}.${EXTENSION}"
+                echo "Last change:  $(stat -c %z "${DIRECTORY}/${name}".${EXTENSION})"
                 echo "Git history:"
                 PWD=$(pwd)
                 cd "${DIRECTORY}" || exit 1
-                git log -p -- "${name}.md"
+                git log -p -- "${name}.${EXTENSION}"
                 cd "${PWD}" || exit 1
             fi
             ;;
@@ -62,12 +62,12 @@ show()
             show help
             ;;
         1)
-            name=$( basename "$1" .md )
+            name=$( basename "$1" ".${EXTENSION}" )
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                 _usage "note show <name of note>"
                 echo "Prints an existing note to stdout"
-            elif [ ! -f "${DIRECTORY}/${name}.md" ]; then
-                error "${name}.md does not exist!"
+            elif [ ! -f "${DIRECTORY}/${name}.${EXTENSION}" ]; then
+                error "${name}.${EXTENSION} does not exist!"
                 read -rp "Would you like to create it now? (Y/n)" choice
                 case "${choice}" in
                     (n*|N*)
@@ -79,7 +79,7 @@ show()
                 esac
 
             else
-                cat "${DIRECTORY}/${name}.md"
+                cat "${DIRECTORY}/${name}.${EXTENSION}"
             fi
             ;;
         *)
@@ -105,9 +105,9 @@ open()
             fi
             ;;
         2)
-            name=$( basename "$1" .md )
-            if [ ! -f "${DIRECTORY}/${name}.md" ]; then
-                error "${name}.md does not exist!"
+            name=$( basename "$1" ".${EXTENSION}" )
+            if [ ! -f "${DIRECTORY}/${name}.${EXTENSION}" ]; then
+                error "${name}.${EXTENSION} does not exist!"
                 read -rp "Would you like to create it now? (Y/n)" choice
                 case "${choice}" in
                     (n*|N*)
@@ -119,7 +119,7 @@ open()
                 esac
 
             else
-                pandoc "${DIRECTORY}/${name}.md" -s -o "${DIRECTORY}/${name}.$2"
+                pandoc "${DIRECTORY}/${name}.${EXTENSION}" -s -o "${DIRECTORY}/${name}.$2"
                 xdg-open "${DIRECTORY}/${name}.$2"
                 rm "${DIRECTORY}/${name}.$2"
             fi
