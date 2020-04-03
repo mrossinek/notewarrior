@@ -1,0 +1,3 @@
+[submodule "ext/gitwatch"]
+	path = ext/gitwatch
+	url = https://github.com/gitwatch/gitwatch

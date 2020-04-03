@@ -4,13 +4,15 @@ clean:
 	rm -f note
 
 install: note wiki2html_pandoc
-	sudo cp $^ /usr/local/bin/
-	sudo cp _note /usr/share/zsh/site-functions/
+	sudo install -b $^ /usr/local/bin/
+	sudo install -b _note /usr/share/zsh/site-functions/
+	sudo install -b ext/gitwatch/gitwatch.sh /usr/local/bin/gitwatch
 
 uninstall:
 	sudo rm /usr/local/bin/note
 	sudo rm /usr/local/bin/wiki2html_pandoc
 	sudo rm /usr/share/zsh/site-functions/_note
+	echo 'Leaving gitwatch installed'
 
 note: *.sh
 	# recreate target
