@@ -9,6 +9,21 @@ It does so by providing the following features:
 - automatically tracks your Notes folder with [gitwatch](https://github.com/gitwatch/gitwatch)
 - using git it allows history rollback and undo/redo functionality
 
+## Installation
+
+You can install notewarrior by simply running:
+```sh
+git clone https://gitlab.com/mrossinek/notewarrior.git
+cd notewarrior
+make install
+```
+
+### Requirements
+Please ensure that the following programs are installed:
+- `inotifywait` (commonly provided via [inotify-tools](https://github.com/inotify-tools/inotify-tools))  [required by `gitwatch`]
+- [pandoc](https://pandoc.org/)
+- [tree](http://mama.indstate.edu/users/ice/tree/)
+
 
 ## List of Commands
 - `init`: initialize note directory
