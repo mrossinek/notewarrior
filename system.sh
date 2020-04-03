@@ -2,14 +2,20 @@
 usage()
 {
     _usage "note <${COMMANDS}>"
-    echo "Use note <command> [help|usage] to find out more about a specific command"
-    echo "Alternatively note usage all prints the help info for all commands"
-    if [ "$2" = "all" ]; then
-        IFS='|' read -ra cmds <<< "${COMMANDS}"
-        for cmd in "${cmds[@]}"; do
-            echo -e "${BBLUE}$cmd${NC}"
-            $cmd usage
-        done
+    echo "Use note <command> [help|usage] to find out more about a specific command."
+    echo "Alternatively note usage all prints the help info for all commands."
+    IFS='|' read -ra cmds <<< "${COMMANDS}"
+    all=" all"
+    if [[ ${cmds[*]}$all =~ (^|[[:space:]])$2($|[[:space:]]) ]]; then
+        if [ "$2" = "all" ]; then
+            for cmd in "${cmds[@]}"; do
+                echo -e "${BBLUE}$cmd${NC}"
+                "${cmd}" usage
+            done
+        else
+            echo -e "${BBLUE}$2${NC}"
+            "$2" usage
+        fi
     fi
 }
 
