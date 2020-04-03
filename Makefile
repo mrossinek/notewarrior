@@ -7,6 +7,8 @@ install: note wiki2html_pandoc
 	sudo install -b $^ /usr/local/bin/
 	sudo install -b _note /usr/share/zsh/site-functions/
 	sudo install -b ext/gitwatch/gitwatch.sh /usr/local/bin/gitwatch
+	mkdir -p "${HOME}/.config/systemd/user"
+	cp ext/gitwatch/gitwatch@.service ${HOME}/.config/systemd/user/
 
 uninstall:
 	sudo rm /usr/local/bin/note
