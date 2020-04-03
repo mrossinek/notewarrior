@@ -1,11 +1,11 @@
 # usage info
 usage()
 {
-    _usage "note <$COMMANDS>"
+    _usage "note <${COMMANDS}>"
     echo "Use note <command> [help|usage] to find out more about a specific command"
     echo "Alternatively note usage all prints the help info for all commands"
     if [ "$2" = "all" ]; then
-        IFS='|' read -ra cmds <<< "$COMMANDS"
+        IFS='|' read -ra cmds <<< "${COMMANDS}"
         for cmd in "${cmds[@]}"; do
             echo -e "${BBLUE}$cmd${NC}"
             $cmd usage
@@ -19,11 +19,11 @@ undo()
 {
     case "$#" in
         0)
-            PWD=`pwd`
-            cd $DIRECTORY
+            PWD=$(pwd)
+            cd "${DIRECTORY}" || exit 1
             git show HEAD
-            read -p "Are you sure you want to undo the above changes? (y/N)" choice
-            case "$choice" in
+            read -rp "Are you sure you want to undo the above changes? (y/N)" choice
+            case "${choice}" in
                 y*|Y*)
                     git revert --no-edit HEAD
                     ;;
@@ -31,7 +31,7 @@ undo()
                     echo "Aborting undo..."
                     ;;
             esac
-            cd $PWD
+            cd "${PWD}" || exit 1
             ;;
         1)
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then

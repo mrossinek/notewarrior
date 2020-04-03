@@ -22,6 +22,8 @@ make install
 Please ensure that the following programs are installed:
 - `inotifywait` (commonly provided via [inotify-tools](https://github.com/inotify-tools/inotify-tools))  [required by `gitwatch`]
 - [pandoc](https://pandoc.org/)
+
+#### Optionally
 - [tree](http://mama.indstate.edu/users/ice/tree/)
 
 

@@ -1,3 +1,4 @@
+# shellcheck disable=SC1090,SC2034
 # CONSTANTS
 DEBUG=false
 DIRECTORY=""
@@ -24,7 +25,7 @@ while getopts ":c:d" opt; do
             ;;
         \?)
             error "Invalid command line option"
-            usage
+            usage "$@"
             exit 1
             ;;
         :)
@@ -37,8 +38,8 @@ done
 # source config
 if $DEBUG ; then
     DIRECTORY=/tmp/notewarrior-debug
-elif [ ! -z ${CONFIG} ]; then
-    . ./${CONFIG}
+elif [ -n "${CONFIG}" ]; then
+    . "./${CONFIG}"
 elif [ -f ~/.config/notewarrior/config ]; then
     . ~/.config/notewarrior/config
 elif [ -f ~/.noterc ]; then
@@ -50,13 +51,13 @@ fi
 # evaluate passed command arguments
 eval "case \"$1\" in
 \"\"|h|help|usage)
-usage $@
+usage $*
 ;;
 $COMMANDS)
-    $@
+    $*
     ;;
 *)
     error \"$1 is an unknown command.\"
-    usage $@
+    usage $*
     ;;
 esac"

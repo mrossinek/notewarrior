@@ -3,8 +3,8 @@ init()
 {
     case "$#" in
         0)
-            git init $DIRECTORY
-            systemctl --user --now enable gitwatch@$(systemd-escape "${DIRECTORY}").service
+            git init "${DIRECTORY}"
+            systemctl --user --now enable gitwatch@"$(systemd-escape "${DIRECTORY}")".service
             ;;
         1)
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then
@@ -26,14 +26,14 @@ deinit()
 {
     case "$#" in
         0)
-            if [ ! -d $DIRECTORY ]; then
-                error "$DIRECTORY does not exist!"
+            if [ ! -d "${DIRECTORY}" ]; then
+                error "${DIRECTORY} does not exist!"
             else
-                read -p "Are you sure you want to delete all user data in $DIRECTORY? (y/N)" choice
+                read -rp "Are you sure you want to delete all user data in ${DIRECTORY}? (y/N)" choice
                 case "$choice" in
                     y*|Y*)
-                        rm -rf $DIRECTORY
-                        systemctl --user --now disable gitwatch@$(systemd-escape "${DIRECTORY}").service
+                        rm -rf "${DIRECTORY}"
+                        systemctl --user --now disable gitwatch@"$(systemd-escape "${DIRECTORY}")".service
                         ;;
                     *)
                         echo "Aborting deinit..."

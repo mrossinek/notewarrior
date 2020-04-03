@@ -3,9 +3,8 @@ list()
 {
     case "$#" in
         0)
-            tree -D $DIRECTORY 2> /dev/null
-            if [ "$?" -ne "0" ]; then
-                ls -l $DIRECTORY
+            if ! tree -D "${DIRECTORY}" 2>/dev/null; then
+                ls -l "${DIRECTORY}"
             fi
             ;;
         1)
@@ -32,20 +31,20 @@ info()
             info help
             ;;
         1)
-            name=$( basename $1 .md )
+            name=$( basename "$1" .md )
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                 _usage "note info <name of note>"
                 echo "Prints the metadata of an existing note"
-            elif [ ! -f $DIRECTORY/$name.md ]; then
+            elif [ ! -f "${DIRECTORY}/${name}.md" ]; then
                 error "$name.md does not exist!"
             else
-                echo "Name:         $name.md"
-                echo "Last change:  `stat -c %z $DIRECTORY/$name.md`"
+                echo "Name:         ${name}.md"
+                echo "Last change:  $(stat -c %z "${DIRECTORY}/${name}".md)"
                 echo "Git history:"
-                PWD=`pwd`
-                cd $DIRECTORY
-                git log -p -- $name.md
-                cd $PWD
+                PWD=$(pwd)
+                cd "${DIRECTORY}" || exit 1
+                git log -p -- "${name}.md"
+                cd "${PWD}" || exit 1
             fi
             ;;
         *)
@@ -63,24 +62,24 @@ show()
             show help
             ;;
         1)
-            name=$( basename $1 .md )
+            name=$( basename "$1" .md )
             if [[ "$1" =  "help" || "$1" = "usage" ]]; then
                 _usage "note show <name of note>"
                 echo "Prints an existing note to stdout"
-            elif [ ! -f $DIRECTORY/$name.md ]; then
-                error "$name.md does not exist!"
-                read -p "Would you like to create it now? (Y/n)" choice
-                case "$choice" in
+            elif [ ! -f "${DIRECTORY}/${name}.md" ]; then
+                error "${name}.md does not exist!"
+                read -rp "Would you like to create it now? (Y/n)" choice
+                case "${choice}" in
                     (n*|N*)
                         echo "Aborting..."
                         ;;
                     *)
-                        add $name
+                        add "${name}"
                         ;;
                 esac
 
             else
-                cat $DIRECTORY/$name.md
+                cat "${DIRECTORY}/${name}.md"
             fi
             ;;
         *)
@@ -102,27 +101,27 @@ open()
                 _usage "note open <name of note> [html|pdf]"
                 echo "Opens the note in the specified format (html by default)"
             else
-                open $1 html
+                open "$1" html
             fi
             ;;
         2)
-            name=$( basename $1 .md )
-            if [ ! -f $DIRECTORY/$name.md ]; then
-                error "$name.md does not exist!"
-                read -p "Would you like to create it now? (Y/n)" choice
-                case "$choice" in
+            name=$( basename "$1" .md )
+            if [ ! -f "${DIRECTORY}/${name}.md" ]; then
+                error "${name}.md does not exist!"
+                read -rp "Would you like to create it now? (Y/n)" choice
+                case "${choice}" in
                     (n*|N*)
                         echo "Aborting..."
                         ;;
                     *)
-                        add $name
+                        add "${name}"
                         ;;
                 esac
 
             else
-                pandoc $DIRECTORY/$name.md -s -o $DIRECTORY/$name.$2
-                xdg-open $DIRECTORY/$name.$2
-                rm $DIRECTORY/$name.$2
+                pandoc "${DIRECTORY}/${name}.md" -s -o "${DIRECTORY}/${name}.$2"
+                xdg-open "${DIRECTORY}/${name}.$2"
+                rm "${DIRECTORY}/${name}.$2"
             fi
             ;;
         *)

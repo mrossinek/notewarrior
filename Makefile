@@ -25,7 +25,7 @@ note: *.sh
 	# append the main part `note.sh`
 	cat note.sh >> $@
 	# insert shell info at top
-	sed -i '1s;^;#!/bin/sh\n\n;' $@
+	sed -i '1s;^;#!/bin/bash\n\n;' $@
 	# make executable
 	chmod +x $@
 
