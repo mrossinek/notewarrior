@@ -6,20 +6,81 @@
 # Usage: cf https://github.com/vimwiki/vimwiki/blob/master/doc/vimwiki.txt#L2216
 # Requirements: pandoc (https://pandoc.org/)
 
-# TODO properly assert arguments
+# check that pandoc is available
+if ! command -v pandoc >/dev/null; then
+    echo -e "pandoc cannot be found! Please install it first from https://pandoc.org"
+    exit 1
+fi
 
-# store required arguments
+# parse `force` argument: assert that it is either 0 or 1
 force=$1
+if [[ ${force} -ne 0 ]] && [[ ${force} -ne 1 ]]; then
+    echo -e "Invalid 'force' argument! It should be either 0 or 1."
+    exit 1
+fi
+# parse `syntax` argument: map vimwiki namings and assert it is supported by pandoc
 syntax=$2
+if [[ "${syntax}" == "default" ]]; then
+    syntax="vimwiki"
+elif [[ "${syntax}" == "media" ]]; then
+    syntax="mediawiki"
+fi
+mapfile -t syntaxes < <(pandoc --list-input-formats)
+if ! [[ ${syntaxes[*]} =~ (^|[[:space:]])$syntax($|[[:space:]]) ]]; then
+    echo -e "Unsupported input format '${syntax}' for pandoc!"
+    exit 1
+fi
+# parse `extension` argument
 extension=$3
+# parse `output_dir` argument: assert directory exists
 output_dir=$4
+if [[ ! -d "${output_dir}" ]]; then
+    echo -e "The output directory '${output_dir}' does not exist or is not a directory!"
+    exit 1
+fi
+# parse `input_file` argument: assert file exists
 input_file=$5
+if [[ ! -f "${input_file}" ]]; then
+    echo -e "The input file '${input_file}' does not exist or is not a regular file!"
+    exit 1
+fi
+# parse `css_file` argument: assert file exists
 css_file=$6
-# TODO also handle optional arguments 7-11
+if [[ ! -f "${css_file}" ]]; then
+    echo -e "The css file '${css_file}' does not exist or is not a regular file!"
+    exit 1
+fi
+# NOTE: the remaning arguments are optional! If unspecified, they default to '-'
+# parse `template_path` argument: assert directory exists
+template_path=$7
+if [[ "${template_path}" != -* ]] && [[ ! -d "${template_path}" ]]; then
+    echo -e "The template path '${template_path}' does not exist or is not a directory!"
+    exit 1
+fi
+# parse `template_default` argument
+template_default=$8
+# parse `template_ext` argument
+template_ext=$8
+# assert template `template_path/template_default.templat_ext` exists
+template_file="${template_path}/${template_default}.${template_ext}"
+if [[ "${template_file}" != -* ]] && [[ ! -f "${template_file}" ]]; then
+    echo -e "The template file '${template_file}' does not exist or is not a regular file!"
+    exit 1
+fi
+# NOTE: the remaining optional arguments (`root_path` and `custom_args`) are ignored!
 
-filename=${input_file##*/}
-filename=${filename%.${extension}}
+output_file=${input_file##*/}
+output_file=${output_file%.${extension}}
 
-# TODO assert pandoc is actually installed
-pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${filename}".html "${input_file}" \
-    --self-contained -c "${css_file}"
+if [[ -f "${output_dir}/${output_file}.html" ]] && [[ ${force} -ne 1 ]]; then
+    echo -e "File ${output_file}.html already exists! Specify force = 1 to overwrite."
+    exit 1
+fi
+
+if [[ "${template_file}" != -* ]]; then
+    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html "${input_file}" \
+        --self-contained --css="${css_file}" --template="${template_file}"
+else
+    pandoc -f "${syntax}" -t html5 -o "${output_dir}"/"${output_file}".html "${input_file}" \
+        --self-contained --css="${css_file}"
+fi
