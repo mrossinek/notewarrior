@@ -13,50 +13,50 @@ COMMANDS="init|deinit|add|edit|move|delete|list|info|show|open|undo"
 # main exectuion
 # parse command line options
 while getopts ":c:d" opt; do
-        case "$opt" in
-                c)
-                        CONFIG="$OPTARG"
-                        shift 2
-                        ;;
-                d)
-                        DEBUG=true
-                        shift 1
-                        ;;
-                \?)
-                        error "Invalid command line option"
-                        usage
-                        exit 1
-                        ;;
-                :)
-                        error "Option -$OPTARG requires an argument."
-                        exit 1
-                        ;;
-        esac
+    case "$opt" in
+        c)
+            CONFIG="$OPTARG"
+            shift 2
+            ;;
+        d)
+            DEBUG=true
+            shift 1
+            ;;
+        \?)
+            error "Invalid command line option"
+            usage
+            exit 1
+            ;;
+        :)
+            error "Option -$OPTARG requires an argument."
+            exit 1
+            ;;
+    esac
 done
 
 # source config
 if $DEBUG ; then
-        DIRECTORY=/tmp/notewarrior-debug
+    DIRECTORY=/tmp/notewarrior-debug
 elif [ ! -z ${CONFIG} ]; then
-        . ./${CONFIG}
+    . ./${CONFIG}
 elif [ -f ~/.config/notewarrior/config ]; then
-        . ~/.config/notewarrior/config
+    . ~/.config/notewarrior/config
 elif [ -f ~/.noterc ]; then
-        . ~/.noterc
+    . ~/.noterc
 else
-        DIRECTORY=~/.notes
+    DIRECTORY=~/.notes
 fi
 
 # evaluate passed command arguments
 eval "case \"$1\" in
-        \"\"|h|help|usage)
-                usage $@
-                ;;
-        $COMMANDS)
-                $@
-                ;;
-        *)
-                error \"$1 is an unknown command.\"
-                usage $@
-                ;;
+\"\"|h|help|usage)
+usage $@
+;;
+$COMMANDS)
+    $@
+    ;;
+*)
+    error \"$1 is an unknown command.\"
+    usage $@
+    ;;
 esac"
