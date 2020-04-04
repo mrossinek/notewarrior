@@ -39,7 +39,7 @@ info()
                 error "$name.${EXTENSION} does not exist!"
             else
                 echo "Name:         ${name}.${EXTENSION}"
-                echo "Last change:  $(stat -c %z "${DIRECTORY}/${name}".${EXTENSION})"
+                echo "Last change:  $(stat -c %z "${DIRECTORY}/${name}.${EXTENSION}")"
                 echo "Git history:"
                 PWD=$(pwd)
                 cd "${DIRECTORY}" || exit 1

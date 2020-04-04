@@ -60,7 +60,7 @@ fi
 # parse `template_default` argument
 template_default=$8
 # parse `template_ext` argument
-template_ext=$8
+template_ext=$9
 # assert template `template_path/template_default.templat_ext` exists
 template_file="${template_path}/${template_default}.${template_ext}"
 if [[ "${template_file}" != -* ]] && [[ ! -f "${template_file}" ]]; then
