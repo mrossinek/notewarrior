@@ -17,6 +17,8 @@ usage()
             _config "DIRECTORY" "$HOME/.notes" "Path to the notes directory."
             _config "EXTENSION" "md" "File extension to use for notes."
             _config "ENABLE_GITWATCH" "true" "Whether to autostart gitwatch (true|false)."
+            _config "OUTPUT_DIR" "=DIRECTORY" "Path where converted notes are stored in."
+            _config "CSS_FILE" "style.css" "CSS filename for HTML generation.  Defaults to use vimwiki's default. This file needs to be present in OUTPUT_DIR."
         elif [ "$2" = "commands" ]; then
             for cmd in "${cmds[@]}"; do
                 echo -e "${BBLUE}$cmd${NC}"

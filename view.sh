@@ -119,9 +119,16 @@ open()
                 esac
 
             else
-                pandoc "${DIRECTORY}/${name}.${EXTENSION}" -s -o "${DIRECTORY}/${name}.$2"
+                case "$2" in
+                    html)
+                        # Couple to vimwiki and use the pandoc conversion script to create the HTML file.
+                        wiki2html_pandoc 1 "markdown" "${EXTENSION}" "${OUTPUT_DIR}" "${DIRECTORY}/${name}.${EXTENSION}" "${OUTPUT_DIR}/${CSS_FILE}" "-" "-" "-"
+                        ;;
+                    *)
+                        pandoc "${DIRECTORY}/${name}.${EXTENSION}" -s -o "${DIRECTORY}/${name}.$2"
+                        ;;
+                esac
                 xdg-open "${DIRECTORY}/${name}.$2"
-                rm "${DIRECTORY}/${name}.$2"
             fi
             ;;
         *)

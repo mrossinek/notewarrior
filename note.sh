@@ -55,6 +55,12 @@ fi
 if [[ ! -v "EXTENSION" ]]; then
     EXTENSION=md
 fi
+if [[ ! -v "OUTPUT_DIR" ]]; then
+    OUTPUT_DIR="${DIRECTORY}"
+fi
+if [[ ! -v "CSS_FILE" ]]; then
+    CSS_FILE=style.css
+fi
 
 # evaluate passed command arguments
 eval "case \"$1\" in
