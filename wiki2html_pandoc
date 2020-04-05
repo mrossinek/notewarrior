@@ -46,7 +46,7 @@ if [[ ! -f "${input_file}" ]]; then
 fi
 # parse `css_file` argument: assert file exists
 css_file=$6
-if [[ ! -f "${css_file}" ]]; then
+if [[ "${css_file}" != "" ]] && [[ ! -f "${css_file}" ]]; then
     echo -e "The css file '${css_file}' does not exist or is not a regular file!"
     exit 1
 fi
