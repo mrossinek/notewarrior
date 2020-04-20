@@ -83,7 +83,7 @@ contents=$(cat "${input_file}")
 # Links to specific sections [desc](#section) need to have spaces replaced by hyphens
 contents=$(sed -E ":a;s/[^!]\[(.+)\]\(\#([^\)]+)\ ([^\)]+)\)/\[\1\]\(\#\2-\3\)/;ta;" <<< "${contents}")
 # Links of other files [desc](file) need to have .html appended to them [desc](file.html)
-contents=$(sed -E "s/[^!]\[(.+)\]\(([^\#\)]+)\)/\[\1\]\(\2.html\)/g" <<< "${contents}")
+contents=$(sed -E "/.*http.*/b; s/[^!]\[(.+)\]\(([^\#\)]+)\)/\[\1\]\(\2.html\)/g" <<< "${contents}")
 
 # perform actual conversion with pandoc
 if [[ "${template_file}" != -* ]]; then
