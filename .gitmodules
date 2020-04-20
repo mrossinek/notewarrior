@@ -1,3 +1,6 @@
 [submodule "ext/gitwatch"]
 	path = ext/gitwatch
 	url = https://github.com/gitwatch/gitwatch
+[submodule "ext/markdown2ctags"]
+	path = ext/markdown2ctags
+	url = https://github.com/jszakmeister/markdown2ctags

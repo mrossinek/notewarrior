@@ -8,6 +8,7 @@ It does so by providing the following features:
 - provides pandoc markdown integration for vimwiki by installing a custom `wiki2html_pandoc` binary
 - automatically tracks your Notes folder with [gitwatch](https://github.com/gitwatch/gitwatch)
 - using git it allows history rollback and undo/redo functionality
+- provides the [markdown2ctags](https://github.com/jszakmeister/markdown2ctags/blob/master/markdown2ctags.py) script to integrate well with [tagbar](https://github.com/majutsushi/tagbar)
 
 ## Installation
 
@@ -25,6 +26,28 @@ Please ensure that the following programs are installed:
 
 #### Optionally
 - [tree](http://mama.indstate.edu/users/ice/tree/)
+
+
+## Integration with [tagbar](https://github.com/majutsushi/tagbar)
+
+Add the following to your vim configuration:
+
+```vim
+" Add support for vimwiki markdown-based files in tagbar
+let g:tagbar_type_vimwiki = {
+            \ 'ctagstype': 'markdown',
+            \ 'ctagsbin' : '/usr/local/bin/markdown2ctags',
+            \ 'ctagsargs' : '-f - --sort=no --sro=::',
+            \ 'kinds' : [
+            \ 's:sections',
+            \ ],
+            \ 'sro' : '::',
+            \ 'kind2scope' : {
+            \ 's' : 'section',
+            \ },
+            \ 'sort': 0,
+            \ }
+```
 
 
 ## List of Commands
