@@ -46,19 +46,19 @@ elif [ -f ~/.noterc ]; then
 fi
 
 # use defaults if nothing was set yet
-if [[ ! -v "DIRECTORY" ]]; then
+if [ ! "${DIRECTORY}" ]; then
     DIRECTORY=~/.notes
 fi
-if [[ ! -v "ENABLE_GITWATCH" ]]; then
+if [ ! "${ENABLE_GITWATCH}" ]; then
     ENABLE_GITWATCH=true
 fi
-if [[ ! -v "EXTENSION" ]]; then
+if [ ! "${EXTENSION}" ]; then
     EXTENSION=md
 fi
-if [[ ! -v "OUTPUT_DIR" ]]; then
+if [ ! -v "${OUTPUT_DIR}" ]; then
     OUTPUT_DIR="${DIRECTORY}"
 fi
-if [[ ! -v "CSS_FILE" ]]; then
+if [ ! "${CSS_FILE}" ]; then
     CSS_FILE=style.css
 fi
 

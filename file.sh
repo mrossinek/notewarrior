@@ -61,7 +61,7 @@ edit()
                 else
                     vim "${DIRECTORY}/${name}.${EXTENSION}"
                 fi
-                if [[ $(stat -c %z "${DIRECTORY}/${name}.${EXTENSION}") != "${CHANGE}" ]]; then
+                if [ "$(stat -c %z "${DIRECTORY}/${name}.${EXTENSION}")" != "${CHANGE}" ]; then
                     _git "edit" "${name}.${EXTENSION}"
                 fi
             fi

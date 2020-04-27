@@ -4,7 +4,7 @@ init()
     case "$#" in
         0)
             git init "${DIRECTORY}"
-            if [[ "${ENABLE_GITWATCH}" == "true" ]]; then
+            if [ "${ENABLE_GITWATCH}" == "true" ]; then
                 systemctl --user --now enable gitwatch@"$(systemd-escape "${DIRECTORY}")".service
             fi
             ;;
@@ -35,7 +35,7 @@ deinit()
                 case "$choice" in
                     y*|Y*)
                         rm -rf "${DIRECTORY}"
-                        if [[ "${ENABLE_GITWATCH}" == "true" ]]; then
+                        if [ "${ENABLE_GITWATCH}" == "true" ]; then
                             systemctl --user --now disable gitwatch@"$(systemd-escape "${DIRECTORY}")".service
                         fi
                         ;;
