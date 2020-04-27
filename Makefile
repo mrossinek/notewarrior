@@ -21,13 +21,12 @@ uninstall:
 note: *.sh
 	# recreate target
 	rm -f $@
-	touch $@
+	# insert shell info at top
+	echo "#!/bin/bash\n" > $@
 	# cat all files except the main part `note.sh`
 	cat $(filter-out note.sh,$^) >> $@
 	# append the main part `note.sh`
 	cat note.sh >> $@
-	# insert shell info at top
-	sed -i '1s;^;#!/bin/bash\n\n;' $@
 	# make executable
 	chmod +x $@
 
