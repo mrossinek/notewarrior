@@ -25,7 +25,8 @@ if [[ "${syntax}" == "default" ]]; then
 elif [[ "${syntax}" == "media" ]]; then
     syntax="mediawiki"
 fi
-mapfile -t syntaxes < <(pandoc --list-input-formats)
+# shellcheck disable=SC2207
+syntaxes=($(awk '{print}' <(pandoc --list-input-formats)))
 if ! [[ ${syntaxes[*]} =~ (^|[[:space:]])$syntax($|[[:space:]]) ]]; then
     echo -e "Unsupported input format '${syntax}' for pandoc!"
     exit 1
