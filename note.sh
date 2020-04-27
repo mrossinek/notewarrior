@@ -55,7 +55,7 @@ fi
 if [ ! "${EXTENSION}" ]; then
     EXTENSION=md
 fi
-if [ ! -v "${OUTPUT_DIR}" ]; then
+if [ ! "${OUTPUT_DIR}" ]; then
     OUTPUT_DIR="${DIRECTORY}"
 fi
 if [ ! "${CSS_FILE}" ]; then
